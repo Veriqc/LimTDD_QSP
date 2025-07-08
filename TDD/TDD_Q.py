@@ -145,10 +145,10 @@ def add_inputs(tn,input_s,qubits_num):
 def add_outputs(tn,output_s,qubits_num):
     U0=np.array([1,0])
     U1=np.array([0,1])
-    if len(output_s)!= qubits_num:
-        print("outputs is not match qubits number")
-        return 
-    for k in range(qubits_num):
+    # if len(output_s)!= qubits_num:
+    #     print("outputs is not match qubits number")
+    #     return 
+    for k in output_s:
         if output_s[k]==0:
             ts=Tensor(U0,[Index('y'+str(k))],'out',[k])
         elif output_s[k]==1:
