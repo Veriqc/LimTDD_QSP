@@ -188,7 +188,8 @@ class Node:
         self.isidentity = False 
         self.ref = 0
         self.hold_prob = 1
-
+        self.reduced_path_num = None
+        
 class TDD:
     def __init__(self,node):
         """TDD"""
@@ -212,6 +213,11 @@ class TDD:
         node_set=set()
         node_set=get_node_set(self.node,node_set)
         return len(node_set)
+    def reduced_path_num(self):
+        if self.node.reduced_path_num:
+            return self.node.reduced_path_num
+        else:
+            return get_reduced_path_num(self.node)
     
     def self_copy(self):
         temp = TDD(self.node)
@@ -431,6 +437,17 @@ def get_node_set(node,node_set=set()):
             if node.successor[k]:
                 node_set = get_node_set(node.successor[k],node_set)
     return node_set
+
+def get_reduced_path_num(node):
+    if node.reduced_path_num:
+        return node.reduced_path_num
+    if node.key==-1:
+        node.reduced_path_num = 1
+    elif node.successor[0]==node.successor[1]:
+        node.reduced_path_num = get_reduced_path_num(node.successor[0])
+    else:
+        node.reduced_path_num = get_reduced_path_num(node.successor[0])+get_reduced_path_num(node.successor[1])
+    return node.reduced_path_num
 
 def Find_Or_Add_Unique_table(x,weigs=[],succ_nodes=[],the_map2=[]):
     """To return a node if it already exist, creates a new node otherwise"""

@@ -255,3 +255,47 @@ def get_gate_data2(cir):
     for d in cir.data:
         data += len(d.qubits)
     return data
+
+def get_dd_from_state_vec(vec,ini=True):
+    n = int(np.log2(len(vec)))
+    if len(vec) !=2**n:
+        print('the vector should have a shape of 2^n *1')
+
+    if type(vec)== list:
+        vec = np.array(vec)
+    new_shape = (2,) * n 
+    vec_nd = vec.reshape(new_shape)
+    all_indexs = []
+    if ini:
+        var=[]
+        for idx in all_indexs:
+            if idx[0]=='x' and not '_' in idx:
+                var.append('a'+idx[1:])
+            var.append(idx)
+            if idx[0]=='y' and not '_' in idx:
+                var.append('b'+idx[1:])
+#         print(var)
+        for k1 in range(n):
+            if not 'x'+str(k1) in var:
+                var.append('x'+str(k1))
+            for k in range(5*len(all_indexs)):
+                s ='x'+str(k1)+'_'+str(k)
+                if not s in var:
+                    var.append(s)
+                s ='y'+str(k1)+'_'+str(k)
+                if not s in var:
+                    var.append(s)               
+            if not 'y'+str(k1) in var:
+                var.append('y'+str(k1))
+        var.reverse()
+        Ini_TDD(index_order=var)
+        set_root_of_unit(2**3)
+
+    var_s = [Index('y'+str(k)) for k in range(n)]
+    var_s.reverse()
+    ts = Tensor(vec_nd,var_s)
+    return ts.tdd()
+
+    
+
+        
